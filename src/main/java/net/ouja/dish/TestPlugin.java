@@ -1,5 +1,6 @@
 package net.ouja.dish;
 
+import net.ouja.api.Player;
 import net.ouja.api.Server;
 import net.ouja.api.entity.EntityTypes;
 import net.ouja.api.entity.monster.*;
@@ -13,19 +14,23 @@ import net.ouja.api.event.player.PlayerAttackEvent;
 import net.ouja.api.event.player.PlayerChatEvent;
 import net.ouja.api.event.player.PlayerJoinEvent;
 import net.ouja.api.event.player.PlayerLoginEvent;
+import net.ouja.api.event.player.PlayerMoveEvent;
 import net.ouja.api.event.player.PlayerQuitEvent;
+import net.ouja.api.event.vehicle.VehicleMoveEvent;
 import net.ouja.api.network.chat.Component;
 import net.ouja.api.plugin.JavaPlugin;
 import net.ouja.api.server.players.BanEntry;
 
 public class TestPlugin extends JavaPlugin implements EventListener {
     public static Server server;
+    public static boolean cancelMovement = false;
 
     @Override
     public void onEnable() {
 //        getLogger().info("[TestPlugin] Running on dish version: " + getServer().getDishVersion());
         getServer().registerEvent(this, this.getClass());
         getServer().registerCommand(new TestCommand());
+        getServer().registerCommand(new CancelMovementCommand());
         server = getServer();
     }
 
@@ -72,6 +77,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
             Cat cat = (Cat)event.getEntity();
             cat.hiss();
             cat.setLaying(!cat.isLaying());
+            event.setCancel(true);
         }
         if (event.getEntity().getType() == EntityTypes.CAMEL) {
             Camel camel = (Camel)event.getEntity();
@@ -154,7 +160,15 @@ public class TestPlugin extends JavaPlugin implements EventListener {
             ZombieVillager zombie = (ZombieVillager)event.getEntity();
             System.out.println(zombie.canBreakDoors());
         }
+    }
 
-        event.setCancel(true);
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        event.setCancel(cancelMovement);
+    }
+
+    @EventHandler
+    public void onVehicleMove(VehicleMoveEvent event) {
+        event.setCancel(cancelMovement);
     }
 }
