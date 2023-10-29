@@ -12,9 +12,11 @@ import net.ouja.api.event.EventListener;
 import net.ouja.api.event.player.PlayerAttackEvent;
 import net.ouja.api.event.player.PlayerChatEvent;
 import net.ouja.api.event.player.PlayerJoinEvent;
+import net.ouja.api.event.player.PlayerLoginEvent;
 import net.ouja.api.event.player.PlayerQuitEvent;
 import net.ouja.api.network.chat.Component;
 import net.ouja.api.plugin.JavaPlugin;
+import net.ouja.api.server.players.BanEntry;
 
 public class TestPlugin extends JavaPlugin implements EventListener {
     public static Server server;
@@ -33,6 +35,20 @@ public class TestPlugin extends JavaPlugin implements EventListener {
     }
 
     @EventHandler
+    public void onLogin(PlayerLoginEvent event) {
+        boolean isBanned = getServer().isPlayerBanned(event.getProfile());
+        BanEntry banEntry = getServer().getBanEntry(event.getProfile());
+        if (isBanned) {
+            System.out.println(String.format("%s was banned by %s for the reason '%s'", event.getProfile().getPlayerName(), banEntry.getSource(), banEntry.getReason()));
+            System.out.println("The ban expires at " + banEntry.getExpires());
+        }
+        if (event.getErrorMessage() != null) {
+            System.out.println("Player errorMessage: " + event.getErrorMessage().getString());
+            event.setErrorMessage(Component.literal("This is a test component for disconnecting the player.").setColor("#9c0000").setUnderlined(true));
+        }
+    }
+
+    @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         System.out.println("A player joined!");
         event.setJoinMessage(Component.literal(String.format("%s joined!", event.getPlayer().getName())).setColor("#7b68aa"));
@@ -46,8 +62,8 @@ public class TestPlugin extends JavaPlugin implements EventListener {
 
     @EventHandler
     public void onMessage(PlayerChatEvent event) {
-        System.out.println(event.getPlayer().getName() + " " + event.getMessage());
-        event.setCancel(true);
+        System.out.println(event.getPlayer().getName() + " " + event.getMessage().getString());
+        event.setCancel(event.getMessage().getString().equals("Cancel me!"));
     }
 
     @EventHandler
