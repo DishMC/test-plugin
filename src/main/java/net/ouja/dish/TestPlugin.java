@@ -1,6 +1,5 @@
 package net.ouja.dish;
 
-import net.ouja.api.Player;
 import net.ouja.api.Server;
 import net.ouja.api.entity.EntityTypes;
 import net.ouja.api.entity.monster.*;
@@ -17,9 +16,11 @@ import net.ouja.api.event.player.PlayerLoginEvent;
 import net.ouja.api.event.player.PlayerMoveEvent;
 import net.ouja.api.event.player.PlayerQuitEvent;
 import net.ouja.api.event.vehicle.VehicleMoveEvent;
+import net.ouja.api.event.world.level.chunk.StructureGenerateEvent;
 import net.ouja.api.network.chat.Component;
 import net.ouja.api.plugin.JavaPlugin;
 import net.ouja.api.server.players.BanEntry;
+import net.ouja.api.world.level.chunk.StructureTypes;
 
 public class TestPlugin extends JavaPlugin implements EventListener {
     public static Server server;
@@ -44,7 +45,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
         boolean isBanned = getServer().isPlayerBanned(event.getProfile());
         BanEntry banEntry = getServer().getBanEntry(event.getProfile());
         if (isBanned) {
-            System.out.println(String.format("%s was banned by %s for the reason '%s'", event.getProfile().getPlayerName(), banEntry.getSource(), banEntry.getReason()));
+            System.out.printf("%s was banned by %s for the reason '%s'%n", event.getProfile().getPlayerName(), banEntry.getSource(), banEntry.getReason());
             System.out.println("The ban expires at " + banEntry.getExpires());
         }
         if (event.getErrorMessage() != null) {
@@ -170,5 +171,14 @@ public class TestPlugin extends JavaPlugin implements EventListener {
     @EventHandler
     public void onVehicleMove(VehicleMoveEvent event) {
         event.setCancel(cancelMovement);
+    }
+
+    @EventHandler
+    public void onStructureGenerated(StructureGenerateEvent event) {
+        if (event.getStructure().getType() == StructureTypes.MINESHAFT) {
+            System.out.printf("%s was generated%n", event.getStructure().getType().getName());
+            System.out.printf("%s is located at x: %s y:%s%n", event.getStructure().getType().getName(), event.getChunkPos().getBlockX(), event.getChunkPos().getBlockZ());
+            event.setCancel(true);
+        }
     }
 }
