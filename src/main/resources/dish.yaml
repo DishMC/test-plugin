@@ -1,6 +1,3 @@
-config-version: 0.1
+config-version: 1
 main-class: net.ouja.dish.TestPlugin
 id: test-plugin
-commands:
-  name: test
-  description: 'a test plugin for dishmc'

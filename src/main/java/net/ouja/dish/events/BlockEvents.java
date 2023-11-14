@@ -9,7 +9,7 @@ import net.ouja.api.world.level.block.BlockPos;
 import net.ouja.api.world.level.block.ButtonBlock;
 import net.ouja.api.world.level.block.Sign;
 
-public class BreakBlockEvent implements EventListener {
+public class BlockEvents implements EventListener {
     @EventHandler
     public void onPlayerBreakBlockEvent(PlayerBreakBlockEvent event) {
         Block block = event.block();

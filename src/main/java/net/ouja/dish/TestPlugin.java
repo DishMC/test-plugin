@@ -21,7 +21,7 @@ import net.ouja.api.network.chat.Component;
 import net.ouja.api.plugin.JavaPlugin;
 import net.ouja.api.server.players.BanEntry;
 import net.ouja.api.world.level.chunk.StructureTypes;
-import net.ouja.dish.events.BreakBlockEvent;
+import net.ouja.dish.events.BlockEvents;
 
 public class TestPlugin extends JavaPlugin implements EventListener {
     public static Server server;
@@ -31,7 +31,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
     public void onEnable() {
 //        getLogger().info("[TestPlugin] Running on dish version: " + getServer().getDishVersion());
         getServer().registerEvent(this, this.getClass());
-        getServer().registerEvent(new BreakBlockEvent(), BreakBlockEvent.class);
+        getServer().registerEvent(new BlockEvents(), BlockEvents.class);
         getServer().registerCommand(new TestCommand());
         getServer().registerCommand(new CancelMovementCommand());
         server = getServer();
