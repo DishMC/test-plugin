@@ -29,4 +29,9 @@ public class TestCommand implements Command {
         TestPlugin.server.broadcast(Component.literal("Testing broadcast").setItalic(true));
         return true;
     }
+
+    @CommandListener(name = "errorCommand")
+    public boolean errorCommand(Player player) throws Exception {
+        throw new Exception("This is a test exception");
+    }
 }

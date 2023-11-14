@@ -7,7 +7,7 @@ import net.ouja.api.network.chat.Component;
 import net.ouja.api.world.level.block.Block;
 import net.ouja.api.world.level.block.BlockPos;
 import net.ouja.api.world.level.block.ButtonBlock;
-import net.ouja.api.world.level.block.Sign;
+import net.ouja.api.world.level.block.SignBlock;
 
 public class BlockEvents implements EventListener {
     @EventHandler
@@ -17,7 +17,7 @@ public class BlockEvents implements EventListener {
         String blockPosString = String.format("%s[x: %s, y: %s, z: %s]", blockPos.getLevel().getName(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
         System.out.println(event.getPlayer().getName() + " broke a block!");
         System.out.printf("The block was \"%s\" and it was located at %s%n", block.getType().getBlockName(), blockPosString);
-        if (block instanceof Sign sign) {
+        if (block instanceof SignBlock sign) {
             System.out.println("This block is a sign!");
             for (Component component : sign.getFrontText().getText(false)) {
                 System.out.println(component.getString());

@@ -19,7 +19,7 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation 'net.ouja:api:23w43b-R4-SNAPSHOT'
+    implementation 'net.ouja:api:23w45a-R0.1-SNAPSHOT'
 }
 
 test {
