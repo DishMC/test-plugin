@@ -15,6 +15,7 @@ import net.ouja.api.event.player.PlayerJoinEvent;
 import net.ouja.api.event.player.PlayerLoginEvent;
 import net.ouja.api.event.player.PlayerMoveEvent;
 import net.ouja.api.event.player.PlayerQuitEvent;
+import net.ouja.api.event.player.PlayerSleepEvent;
 import net.ouja.api.event.vehicle.VehicleMoveEvent;
 import net.ouja.api.event.world.level.chunk.StructureGenerateEvent;
 import net.ouja.api.network.chat.Component;
@@ -22,6 +23,7 @@ import net.ouja.api.plugin.JavaPlugin;
 import net.ouja.api.server.players.BanEntry;
 import net.ouja.api.world.level.chunk.StructureTypes;
 import net.ouja.dish.events.BlockEvents;
+import net.ouja.dish.events.LootGeneratedEvent;
 
 public class TestPlugin extends JavaPlugin implements EventListener {
     public static Server server;
@@ -32,6 +34,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
 //        getLogger().info("[TestPlugin] Running on dish version: " + getServer().getDishVersion());
         getServer().registerEvent(this, this.getClass());
         getServer().registerEvent(new BlockEvents(), BlockEvents.class);
+        getServer().registerEvent(new LootGeneratedEvent(), LootGeneratedEvent.class);
         getServer().registerCommand(new TestCommand());
         getServer().registerCommand(new CancelMovementCommand());
         server = getServer();
@@ -182,5 +185,16 @@ public class TestPlugin extends JavaPlugin implements EventListener {
             System.out.printf("%s is located at x: %s y:%s%n", event.getStructure().getType().getName(), event.getChunkPos().getBlockX(), event.getChunkPos().getBlockZ());
             event.setCancel(true);
         }
+    }
+
+    @EventHandler
+    public void onSleep(PlayerSleepEvent event) {
+        int max = 10;
+        int min = 1;
+        int range = max - min + 1;
+        int rand = (int)(Math.random() * range) + min;
+        if (rand > 5) event.setCancel(true);
+        System.out.println(event.getPlayer().getName() + " started to sleep!");
+        event.setCanSleepWhileMonstersAreNear(true);
     }
 }

@@ -3,6 +3,7 @@ package net.ouja.dish.events;
 import net.ouja.api.event.EventHandler;
 import net.ouja.api.event.EventListener;
 import net.ouja.api.event.player.PlayerBreakBlockEvent;
+import net.ouja.api.event.player.PlayerPlaceBlockEvent;
 import net.ouja.api.network.chat.Component;
 import net.ouja.api.world.level.block.Block;
 import net.ouja.api.world.level.block.BlockPos;
@@ -28,5 +29,14 @@ public class BlockEvents implements EventListener {
         if (block instanceof ButtonBlock button) {
             System.out.printf("The button's signal is %s%n", button.getSignal());
         }
+    }
+
+    @EventHandler
+    public void onPlayerPlaceBlockEvent(PlayerPlaceBlockEvent event) {
+        Block block = event.block();
+        BlockPos blockPos = block.getBlockPos();
+        String blockPosString = String.format("%s[x: %s, y: %s, z: %s]", blockPos.getLevel().getName(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        System.out.println(event.getPlayer().getName() + " placed a block!");
+        System.out.printf("The block is \"%s\" and it is located at %s%n", block.getType().getBlockName(), blockPosString);
     }
 }
