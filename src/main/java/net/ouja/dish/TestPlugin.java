@@ -23,6 +23,7 @@ import net.ouja.api.plugin.JavaPlugin;
 import net.ouja.api.server.players.BanEntry;
 import net.ouja.api.world.level.chunk.StructureTypes;
 import net.ouja.dish.events.BlockEvents;
+import net.ouja.dish.events.DeathEvent;
 import net.ouja.dish.events.LootGeneratedEvent;
 
 public class TestPlugin extends JavaPlugin implements EventListener {
@@ -35,6 +36,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
         getServer().registerEvent(this, this.getClass());
         getServer().registerEvent(new BlockEvents(), BlockEvents.class);
         getServer().registerEvent(new LootGeneratedEvent(), LootGeneratedEvent.class);
+        getServer().registerEvent(new DeathEvent(), DeathEvent.class);
         getServer().registerCommand(new TestCommand());
         getServer().registerCommand(new CancelMovementCommand());
         server = getServer();
