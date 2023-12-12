@@ -1,5 +1,6 @@
 package net.ouja.dish;
 
+import net.ouja.api.Player;
 import net.ouja.api.Server;
 import net.ouja.api.entity.EntityTypes;
 import net.ouja.api.entity.monster.*;
@@ -10,10 +11,12 @@ import net.ouja.api.entity.passive.*;
 import net.ouja.api.event.EventHandler;
 import net.ouja.api.event.EventListener;
 import net.ouja.api.event.player.PlayerAttackEvent;
+import net.ouja.api.event.player.PlayerAttemptPickUpItem;
 import net.ouja.api.event.player.PlayerChatEvent;
 import net.ouja.api.event.player.PlayerJoinEvent;
 import net.ouja.api.event.player.PlayerLoginEvent;
 import net.ouja.api.event.player.PlayerMoveEvent;
+import net.ouja.api.event.player.PlayerPickUpItemEvent;
 import net.ouja.api.event.player.PlayerQuitEvent;
 import net.ouja.api.event.player.PlayerSleepEvent;
 import net.ouja.api.event.vehicle.VehicleMoveEvent;
@@ -24,6 +27,7 @@ import net.ouja.api.server.players.BanEntry;
 import net.ouja.api.world.level.chunk.StructureTypes;
 import net.ouja.dish.events.BlockEvents;
 import net.ouja.dish.events.DeathEvent;
+import net.ouja.dish.events.DropItemEvent;
 import net.ouja.dish.events.LootGeneratedEvent;
 
 public class TestPlugin extends JavaPlugin implements EventListener {
@@ -37,6 +41,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
         getServer().registerEvent(new BlockEvents(), BlockEvents.class);
         getServer().registerEvent(new LootGeneratedEvent(), LootGeneratedEvent.class);
         getServer().registerEvent(new DeathEvent(), DeathEvent.class);
+        getServer().registerEvent(new DropItemEvent(), DropItemEvent.class);
         getServer().registerCommand(new TestCommand());
         getServer().registerCommand(new CancelMovementCommand());
         server = getServer();
@@ -198,5 +203,10 @@ public class TestPlugin extends JavaPlugin implements EventListener {
         if (rand > 5) event.setCancel(true);
         System.out.println(event.getPlayer().getName() + " started to sleep!");
         event.setCanSleepWhileMonstersAreNear(true);
+    }
+
+    @EventHandler
+    public void onPlayerPickUpItem(PlayerPickUpItemEvent event) {
+        System.out.println(event.getPlayer().getName() + " picked up an item!");
     }
 }
