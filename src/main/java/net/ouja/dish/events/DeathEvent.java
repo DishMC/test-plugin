@@ -1,7 +1,7 @@
 package net.ouja.dish.events;
 
-import net.ouja.api.Entity;
-import net.ouja.api.Player;
+import net.ouja.api.entity.Entity;
+import net.ouja.api.entity.Player;
 import net.ouja.api.event.EventHandler;
 import net.ouja.api.event.EventListener;
 import net.ouja.api.event.entity.EntityDeathEvent;

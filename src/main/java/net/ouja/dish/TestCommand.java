@@ -1,6 +1,6 @@
 package net.ouja.dish;
 
-import net.ouja.api.Player;
+import net.ouja.api.entity.Player;
 import net.ouja.api.commands.Command;
 import net.ouja.api.commands.CommandListener;
 import net.ouja.api.network.chat.Component;
@@ -8,13 +8,8 @@ import net.ouja.api.network.chat.Component;
 public class TestCommand implements Command {
 
     @Override
-    @CommandListener(name = "test")
+    @CommandListener(name = "test", allowConsole = false)
     public boolean command(Player player) {
-        if (player.isConsole()) {
-            System.out.println("Can't run this command as console");
-            return false;
-        }
-
         System.out.println(player.getLevel().getName());
         System.out.println(player.getLevel().getSeed());
         System.out.println(player.getLevel().getPlayers().size());
@@ -28,10 +23,5 @@ public class TestCommand implements Command {
 
         TestPlugin.server.broadcast(Component.literal("Testing broadcast").setItalic(true));
         return true;
-    }
-
-    @CommandListener(name = "errorCommand")
-    public boolean errorCommand(Player player) throws Exception {
-        throw new Exception("This is a test exception");
     }
 }

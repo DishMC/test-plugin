@@ -1,17 +1,27 @@
 package net.ouja.dish;
 
-import net.ouja.api.Player;
 import net.ouja.api.Server;
 import net.ouja.api.entity.EntityTypes;
-import net.ouja.api.entity.monster.*;
+import net.ouja.api.entity.monster.Creeper;
+import net.ouja.api.entity.monster.Ghast;
+import net.ouja.api.entity.monster.Hoglin;
+import net.ouja.api.entity.monster.Ravager;
+import net.ouja.api.entity.monster.Shulker;
+import net.ouja.api.entity.monster.Vex;
+import net.ouja.api.entity.monster.Zombie;
+import net.ouja.api.entity.monster.ZombieVillager;
 import net.ouja.api.entity.neutral.Goat;
 import net.ouja.api.entity.neutral.Panda;
 import net.ouja.api.entity.neutral.Wolf;
-import net.ouja.api.entity.passive.*;
+import net.ouja.api.entity.passive.Camel;
+import net.ouja.api.entity.passive.Cat;
+import net.ouja.api.entity.passive.Horse;
+import net.ouja.api.entity.passive.Pig;
+import net.ouja.api.entity.passive.Squid;
+import net.ouja.api.entity.passive.TropicalFish;
 import net.ouja.api.event.EventHandler;
 import net.ouja.api.event.EventListener;
 import net.ouja.api.event.player.PlayerAttackEvent;
-import net.ouja.api.event.player.PlayerAttemptPickUpItem;
 import net.ouja.api.event.player.PlayerChatEvent;
 import net.ouja.api.event.player.PlayerJoinEvent;
 import net.ouja.api.event.player.PlayerLoginEvent;
@@ -36,7 +46,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
 
     @Override
     public void onEnable() {
-//        getLogger().info("[TestPlugin] Running on dish version: " + getServer().getDishVersion());
+        //getLogger().info("[TestPlugin] Running on dish version: " + getServer().getDishVersion());
         getServer().registerEvent(this, this.getClass());
         getServer().registerEvent(new BlockEvents(), BlockEvents.class);
         getServer().registerEvent(new LootGeneratedEvent(), LootGeneratedEvent.class);
@@ -49,7 +59,7 @@ public class TestPlugin extends JavaPlugin implements EventListener {
 
     @Override
     public void onDisable() {
-//        getLogger().info("[TestPlugin] Disabling plugin");
+        //getLogger().info("[TestPlugin] Disabling plugin");
     }
 
     @EventHandler
