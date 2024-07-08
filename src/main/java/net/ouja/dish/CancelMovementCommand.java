@@ -5,8 +5,6 @@ import net.ouja.api.commands.Command;
 import net.ouja.api.commands.CommandListener;
 import net.ouja.api.network.chat.Component;
 
-import java.util.List;
-
 public class CancelMovementCommand implements Command {
     @Override
     @CommandListener(name = "cancel_movement", allowConsole = true)

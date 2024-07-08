@@ -30,23 +30,24 @@ import net.ouja.api.event.player.PlayerPickUpItemEvent;
 import net.ouja.api.event.player.PlayerQuitEvent;
 import net.ouja.api.event.player.PlayerSleepEvent;
 import net.ouja.api.event.vehicle.VehicleMoveEvent;
-import net.ouja.api.event.world.level.chunk.StructureGenerateEvent;
 import net.ouja.api.network.chat.Component;
 import net.ouja.api.plugin.JavaPlugin;
 import net.ouja.api.server.players.BanEntry;
-import net.ouja.api.world.level.chunk.StructureTypes;
 import net.ouja.dish.events.BlockEvents;
 import net.ouja.dish.events.DeathEvent;
 import net.ouja.dish.events.DropItemEvent;
 import net.ouja.dish.events.LootGeneratedEvent;
 
+import java.util.logging.Logger;
+
 public class TestPlugin extends JavaPlugin implements EventListener {
     public static Server server;
     public static boolean cancelMovement = false;
+    public static final Logger LOGGER = Logger.getLogger("TestPlugin");
 
     @Override
     public void onEnable() {
-        //getLogger().info("[TestPlugin] Running on dish version: " + getServer().getDishVersion());
+        LOGGER.info("Running on dish version: " + getServer().getDishVersion());
         getServer().registerEvent(this, this.getClass());
         getServer().registerEvent(new BlockEvents(), BlockEvents.class);
         getServer().registerEvent(new LootGeneratedEvent(), LootGeneratedEvent.class);
@@ -55,11 +56,16 @@ public class TestPlugin extends JavaPlugin implements EventListener {
         getServer().registerCommand(new TestCommand());
         getServer().registerCommand(new CancelMovementCommand());
         server = getServer();
+        if (server != null && server.getServerLinks() != null && !server.getServerLinks().isEmpty()) {
+            System.out.println(server.getServerLinks().getFirst());
+        } else {
+            LOGGER.severe("serverLinks is null or size is 0");
+        }
     }
 
     @Override
     public void onDisable() {
-        //getLogger().info("[TestPlugin] Disabling plugin");
+        LOGGER.severe("Disabling plugin");
     }
 
     @EventHandler
@@ -67,30 +73,30 @@ public class TestPlugin extends JavaPlugin implements EventListener {
         boolean isBanned = getServer().isPlayerBanned(event.getProfile());
         BanEntry banEntry = getServer().getBanEntry(event.getProfile());
         if (isBanned) {
-            System.out.printf("%s was banned by %s for the reason '%s'%n", event.getProfile().getPlayerName(), banEntry.getSource(), banEntry.getReason());
-            System.out.println("The ban expires at " + banEntry.getExpires());
+            LOGGER.info(String.format("%s was banned by %s for the reason '%s'%n", event.getProfile().getPlayerName(), banEntry.getSource(), banEntry.getReason()));
+            LOGGER.info("The ban expires at " + banEntry.getExpires());
         }
         if (event.getErrorMessage() != null) {
-            System.out.println("Player errorMessage: " + event.getErrorMessage().getString());
+            LOGGER.info("Player errorMessage: " + event.getErrorMessage().getString());
             event.setErrorMessage(Component.literal("This is a test component for disconnecting the player.").setColor("#9c0000").setUnderlined(true));
         }
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        System.out.println("A player joined!");
+        LOGGER.info("A player joined!");
         event.setJoinMessage(Component.literal(String.format("%s joined!", event.getPlayer().getName())).setColor("#7b68aa"));
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        System.out.println("A player left!");
+        LOGGER.info("A player left!");
         event.setQuitMessage(Component.literal(String.format("%s quit", event.getPlayer().getName())).setColor("#7b68aa"));
     }
 
     @EventHandler
     public void onMessage(PlayerChatEvent event) {
-        System.out.println(event.getPlayer().getName() + " " + event.getMessage().getString());
+        LOGGER.info(event.getPlayer().getName() + " " + event.getMessage().getString());
         event.setCancel(event.getMessage().getString().equals("Cancel me!"));
     }
 
@@ -196,27 +202,18 @@ public class TestPlugin extends JavaPlugin implements EventListener {
     }
 
     @EventHandler
-    public void onStructureGenerated(StructureGenerateEvent event) {
-        if (event.getStructure().getType() == StructureTypes.MINESHAFT) {
-            System.out.printf("%s was generated%n", event.getStructure().getType().getName());
-            System.out.printf("%s is located at x: %s y:%s%n", event.getStructure().getType().getName(), event.getChunkPos().getBlockX(), event.getChunkPos().getBlockZ());
-            event.setCancel(true);
-        }
-    }
-
-    @EventHandler
     public void onSleep(PlayerSleepEvent event) {
         int max = 10;
         int min = 1;
         int range = max - min + 1;
         int rand = (int)(Math.random() * range) + min;
         if (rand > 5) event.setCancel(true);
-        System.out.println(event.getPlayer().getName() + " started to sleep!");
+        LOGGER.info(event.getPlayer().getName() + " started to sleep!");
         event.setCanSleepWhileMonstersAreNear(true);
     }
 
     @EventHandler
     public void onPlayerPickUpItem(PlayerPickUpItemEvent event) {
-        System.out.println(event.getPlayer().getName() + " picked up an item!");
+        LOGGER.info(event.getPlayer().getName() + " picked up an item!");
     }
 }
